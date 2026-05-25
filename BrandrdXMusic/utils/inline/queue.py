@@ -77,7 +77,6 @@ def aq_markup(_, chat_id):
     return buttons
 
 
-
 def queuemarkup(_, vidid, chat_id):
 
     buttons = [
