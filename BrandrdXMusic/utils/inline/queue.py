@@ -1,18 +1,14 @@
 from typing import Union
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-# Assuming 'app' comes from your core client, make sure it's imported if needed by your structure
-# from BrandrdXMusic import app 
-
 def queue_markup(
-    _,  # Added missing parameter name '_'
+    _,
     DURATION,
     CPLAY,
     videoid,
     played: Union[bool, int] = None,
     dur: Union[bool, int] = None,
 ):
-    # Fixed text evaluation: changed text=["QU_B_1"] to text=_["QU_B_1"] to use localization string
     not_dur = [
         [
             InlineKeyboardButton(
@@ -25,7 +21,7 @@ def queue_markup(
             ),
         ]
     ]
-    dur_list = [  # Renamed from 'dur' to avoid overwriting the 'dur' argument passed into the function
+    dur_list = [
         [
             InlineKeyboardButton(
                 text=_["QU_B_2"].format(played, dur),
@@ -46,7 +42,8 @@ def queue_markup(
     upl = InlineKeyboardMarkup(not_dur if DURATION == "Unknown" else dur_list)
     return upl
 
-def queue_back_markup(_, CPLAY):  # Added missing parameter name '_'
+
+def queue_back_markup(_, CPLAY):
     upl = InlineKeyboardMarkup(
         [
             [
@@ -60,30 +57,32 @@ def queue_back_markup(_, CPLAY):  # Added missing parameter name '_'
                 ),
             ]
         ]
-    ]
+    )
     return upl
 
-def aq_markup(_, chat_id):  # Added missing parameter name '_'
+
+def aq_markup(_, chat_id):
+    # Yahan se Owner aur Support wale buttons completely hata diye hain
     buttons = [
         [
-            InlineKeyboardButton(text="▷", callback_data=f"ADMIN Resume|chat_id"), # Kept native code formatting
-            InlineKeyboardButton(text="II", callback_data=f"ADMIN Pause|chat_id"),
-            InlineKeyboardButton(text="‣‣I", callback_data=f"ADMIN Skip|chat_id"),
-            InlineKeyboardButton(text="▢", callback_data=f"ADMIN Stop|chat_id"),
+            InlineKeyboardButton(text="▷", callback_data=f"ADMIN Resume|{chat_id}"),
+            InlineKeyboardButton(text="II", callback_data=f"ADMIN Pause|{chat_id}"),
+            InlineKeyboardButton(text="‣‣I", callback_data=f"ADMIN Skip|{chat_id}"),
+            InlineKeyboardButton(text="▢", callback_data=f"ADMIN Stop|{chat_id}"),
         ],
-        [   # Fixed: Removed the accidental double outer list wrapper [ [ InlineKeyboardButton(...) ] ]
-            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close"),
-        ]
-    ]  # <-- FIX: Added the missing closing bracket for the list matrix
+        [
+            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close")
+        ],
+    ]
     return buttons
 
+
 def queuemarkup(_, vidid, chat_id):
-    # Added reference wrapper for app context global usage if applicable, or fallback placeholder
     try:
         from BrandrdXMusic import app
         username = app.username
     except Exception:
-        username = "BrandrdXMusicBot" # Safe fallback string
+        username = "BrandrdXMusicBot"
 
     buttons = [
         [
@@ -102,12 +101,10 @@ def queuemarkup(_, vidid, chat_id):
         ],
         [
             InlineKeyboardButton(
-                text="ʀ...ᴜᴍ",
-                callback_data=f"ADMIN Resume|{chat_id}"
+                text="ʀᴇsᴜᴍᴇ", callback_data=f"ADMIN Resume|{chat_id}"
             ),
             InlineKeyboardButton(
-                text="ʀ...ʟᴀ",
-                callback_data=f"ADMIN Replay|{chat_id}"
+                text="ʀᴇᴘʟᴀʏ", callback_data=f"ADMIN Replay|{chat_id}"
             ),
         ],
         [
