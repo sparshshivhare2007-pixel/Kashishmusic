@@ -37,9 +37,6 @@ user_command_count = {}
 SPAM_THRESHOLD = 2
 SPAM_WINDOW_SECONDS = 5
 
-
-from pyrogram.types import InlineKeyboardMarkup
-
 import config
 from BrandrdXMusic import Carbon, YouTube, app
 from BrandrdXMusic.core.call import Hotty
@@ -54,6 +51,16 @@ from BrandrdXMusic.utils.inline import (
 from BrandrdXMusic.utils.pastebin import HottyBin
 from BrandrdXMusic.utils.stream.queue import put_queue, put_queue_index
 from youtubesearchpython.__future__ import VideosSearch
+
+
+# --- Auto Delete Helper Function ---
+async def auto_delete_message(message, delay=10):
+    await asyncio.sleep(delay)
+    try:
+        await message.delete()
+    except:
+        pass
+# -----------------------------------
 
 
 async def stream(
@@ -157,7 +164,7 @@ async def stream(
         if count == 0:
             return
         else:
-            link = await brandedBin(msg)
+            link = await HottyBin(msg) # Fixed brandedBin to HottyBin as per pastebin import
             lines = msg.count("\n")
             if lines >= 17:
                 car = os.linesep.join(msg.split(os.linesep)[:17])
@@ -165,12 +172,15 @@ async def stream(
                 car = msg
             carbon = await Carbon.generate(car, randint(100, 10000000))
             upl = close_markup(_)
-            return await app.send_photo(
+            q_msg = await app.send_photo(
                 original_chat_id,
                 photo=carbon,
                 caption=_["play_21"].format(position, link),
                 reply_markup=upl,
             )
+            # Auto delete playlist queue message
+            asyncio.create_task(auto_delete_message(q_msg, delay=10))
+            return
     elif streamtype == "youtube":
         link = result["link"]
         vidid = result["vidid"]
@@ -199,7 +209,7 @@ async def stream(
             img = await get_thumb(vidid)
             position = len(db.get(chat_id)) - 1
             button = aq_markup(_, chat_id)
-            await app.send_photo(
+            q_msg = await app.send_photo(
                 chat_id=original_chat_id,
                 photo=img,
                 caption=_["queue_4"].format(
@@ -207,6 +217,8 @@ async def stream(
                 ),
                 reply_markup=InlineKeyboardMarkup(button),
             )
+            # Auto delete youtube queue message
+            asyncio.create_task(auto_delete_message(q_msg, delay=10))
         else:
             if not forceplay:
                 db[chat_id] = []
@@ -263,11 +275,13 @@ async def stream(
             )
             position = len(db.get(chat_id)) - 1
             button = aq_markup(_, chat_id)
-            await app.send_message(
+            q_msg = await app.send_message(
                 chat_id=original_chat_id,
                 text=_["queue_4"].format(position, title[:18], duration_min, user_name),
                 reply_markup=InlineKeyboardMarkup(button),
             )
+            # Auto delete soundcloud queue message
+            asyncio.create_task(auto_delete_message(q_msg, delay=10))
         else:
             if not forceplay:
                 db[chat_id] = []
@@ -284,7 +298,7 @@ async def stream(
                 "audio",
                 forceplay=forceplay,
             )
-            button = stream_markup2(_, chat_id)
+            button = stream_markup2(_, chat_id) # Using what you provided, make sure stream_markup2 is imported in your code
             run = await app.send_photo(
                 original_chat_id,
                 photo=config.SOUNCLOUD_IMG_URL,
@@ -315,11 +329,13 @@ async def stream(
             )
             position = len(db.get(chat_id)) - 1
             button = aq_markup(_, chat_id)
-            await app.send_message(
+            q_msg = await app.send_message(
                 chat_id=original_chat_id,
                 text=_["queue_4"].format(position, title[:18], duration_min, user_name),
                 reply_markup=InlineKeyboardMarkup(button),
             )
+            # Auto delete telegram queue message
+            asyncio.create_task(auto_delete_message(q_msg, delay=10))
         else:
             if not forceplay:
                 db[chat_id] = []
@@ -338,7 +354,7 @@ async def stream(
             )
             if video:
                 await add_active_video_chat(chat_id)
-            button = stream_markup2(_, chat_id)
+            button = stream_markup2(_, chat_id) # Ensure this is imported properly in your bot
             run = await app.send_photo(
                 original_chat_id,
                 photo=config.TELEGRAM_VIDEO_URL if video else config.TELEGRAM_AUDIO_URL,
@@ -368,11 +384,13 @@ async def stream(
             )
             position = len(db.get(chat_id)) - 1
             button = aq_markup(_, chat_id)
-            await app.send_message(
+            q_msg = await app.send_message(
                 chat_id=original_chat_id,
                 text=_["queue_4"].format(position, title[:18], duration_min, user_name),
                 reply_markup=InlineKeyboardMarkup(button),
             )
+            # Auto delete live track queue message
+            asyncio.create_task(auto_delete_message(q_msg, delay=10))
         else:
             if not forceplay:
                 db[chat_id] = []
@@ -430,10 +448,12 @@ async def stream(
             )
             position = len(db.get(chat_id)) - 1
             button = aq_markup(_, chat_id)
-            await mystic.edit_text(
+            q_msg = await mystic.edit_text(
                 text=_["queue_4"].format(position, title[:27], duration_min, user_name),
                 reply_markup=InlineKeyboardMarkup(button),
             )
+            # Auto delete index link queue message
+            asyncio.create_task(auto_delete_message(q_msg, delay=10))
         else:
             if not forceplay:
                 db[chat_id] = []
@@ -471,18 +491,6 @@ async def get_thumb(videoid):
     try:
         # Search for the video using video ID
         query = f"https://www.youtube.com/watch?v={videoid}"
-        results = VideosSearch(query, limit=1)
-        for result in (await results.next())["result"]:
-            thumbnail = result["thumbnails"][0]["url"].split("?")[0]
-        return thumbnail
-    except Exception as e:
-        return config.YOUTUBE_IMG_URL
-
-
-async def get_thumb(vidid):
-    try:
-        # Search for the video using video ID
-        query = f"https://www.youtube.com/watch?v={vidid}"
         results = VideosSearch(query, limit=1)
         for result in (await results.next())["result"]:
             thumbnail = result["thumbnails"][0]["url"].split("?")[0]
