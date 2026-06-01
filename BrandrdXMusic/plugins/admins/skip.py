@@ -50,6 +50,11 @@ async def skip(cli, message: Message, _, chat_id):
                                 return await message.reply_text(_["admin_12"])
                             if popped:
                                 await auto_clean(popped)
+                                # Purane chal rahe song ka message delete karne ke liye
+                                try:
+                                    await popped["mystic"].delete()
+                                except:
+                                    pass
                             if not check:
                                 try:
                                     end_msg = await message.reply_text(
@@ -78,7 +83,12 @@ async def skip(cli, message: Message, _, chat_id):
         try:
             popped = check.pop(0)
             if popped:
-                await auto_clean(popped) # Yeh purane song ke message ko delete karta hai
+                await auto_clean(popped)
+                # Yahan standard skip par chalte hue purane song ka photo message delete hoga
+                try:
+                    await popped["mystic"].delete()
+                except:
+                    pass
             if not check:
                 end_msg = await message.reply_text(
                     text=_["admin_6"].format(
@@ -117,7 +127,6 @@ async def skip(cli, message: Message, _, chat_id):
         db[chat_id][0]["speed_path"] = None
         db[chat_id][0]["speed"] = 1.0
     
-    # Naye song ki details yahan se send hoti hain, ab inme koi delete timer nahi hai
     if "live_" in queued:
         n, link = await YouTube.video(videoid, True)
         if n == 0:
