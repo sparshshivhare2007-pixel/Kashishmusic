@@ -2,7 +2,6 @@ import math
 from pyrogram.types import InlineKeyboardButton
 from BrandrdXMusic.utils.formatters import time_to_seconds
 
-
 # Track Markup
 def track_markup(_, videoid, user_id, channel, fplay):
     return [
@@ -23,7 +22,6 @@ def track_markup(_, videoid, user_id, channel, fplay):
             )
         ],
     ]
-
 
 # Stream Timer Markup
 def stream_markup_timer(_, vidid, chat_id, played, dur):
@@ -69,7 +67,6 @@ def stream_markup_timer(_, vidid, chat_id, played, dur):
         [InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close")],
     ]
 
-
 # Stream Markup
 def stream_markup(_, videoid, chat_id):
     return [
@@ -82,7 +79,6 @@ def stream_markup(_, videoid, chat_id):
         ],
         [InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close")],
     ]
-
 
 # Playlist Markup
 def playlist_markup(_, videoid, user_id, ptype, channel, fplay):
@@ -105,7 +101,6 @@ def playlist_markup(_, videoid, user_id, ptype, channel, fplay):
         ],
     ]
 
-
 # Livestream Markup
 def livestream_markup(_, videoid, user_id, mode, channel, fplay):
     return [
@@ -122,7 +117,6 @@ def livestream_markup(_, videoid, user_id, mode, channel, fplay):
             ),
         ],
     ]
-
 
 # Slider Markup
 def slider_markup(_, videoid, user_id, query, query_type, channel, fplay):
