@@ -237,6 +237,17 @@ class Call(PyTgCalls):
         assistant = await group_assistant(self, chat_id)
         try:
             check = db.get(chat_id)
+            
+            # --- Auto Delete Old Post on Force Stop ---
+            if check and isinstance(check, list) and len(check) > 0:
+                try:
+                    old_msg = check[0].get("mystic")
+                    if old_msg:
+                        await old_msg.delete()
+                except Exception:
+                    pass
+            # ------------------------------------------
+            
             check.pop(0)
         except:
             pass
@@ -357,6 +368,17 @@ class Call(PyTgCalls):
 
     async def change_stream(self, client, chat_id):
         check = db.get(chat_id)
+        
+        # --- Auto Delete Old Post on Song Change / End ---
+        if check and isinstance(check, list) and len(check) > 0:
+            try:
+                old_message = check[0].get("mystic")
+                if old_message:
+                    await old_message.delete()
+            except Exception:
+                pass
+        # -------------------------------------------------
+
         popped = None
         loop = await get_loop(chat_id)
         try:
@@ -630,6 +652,5 @@ class Call(PyTgCalls):
             if not isinstance(update, StreamAudioEnded):
                 return
             await self.change_stream(client, update.chat_id)
-
 
 Hotty = Call()
