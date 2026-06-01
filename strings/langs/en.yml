@@ -227,7 +227,7 @@ song_9 : "<emoji id='5438522812669111826'>🟥</emoji> Failed to download song f
 song_10 : "<emoji id='5438522812669111826'>🟥</emoji> Failed to upload on Telegram servers."
 song_11 : "<emoji id='5343819952023428595'>⚡️</emoji> Uploading started, baby\n\n<emoji id='5408910404732595664'>🕐</emoji> Please hold on..."
 
-play_1 : "<emoji id='5041992177563993101'>☄️</emoji>Processing....<emoji id='5041992177563993101'>☄️</emoji>"
+play_1 : "<emoji id='5041992177563993101'>☄️</emoji>"
 play_2 : "<b><emoji id='5041992177563993101'>☄️</emoji> ➻ Channel Play Mode</b>\n\n<emoji id='5408910404732595664'>🕐</emoji> Processing, please wait...\n\n<emoji id='5469931384518755322'>♾</emoji> <b>Linked Channel :</b> {0}"
 play_3 : "<emoji id='5438522812669111826'>🟥</emoji> » Failed to process query."
 play_4 : "<b><emoji id='5041792560368977040'>👑</emoji> Admins Only Play</b>\n<emoji id='5438522812669111826'>🟥</emoji> Only admins of this chat are allowed to play\n\n<emoji id='5469715729915859659'>✔️</emoji> Change play mode via /playmode"
@@ -266,8 +266,8 @@ queue_6 : "<b><emoji id='5408910404732595664'>🕐</emoji> Duration :</b> Unknow
 queue_7 : "\n📋 Click on the button below to get the whole queued list."
 queue_8 : "<b><emoji id='5409025823388741707'>🎵</emoji> {0} Player</b>\n\n<emoji id='5039816072253932764'>💎</emoji> Streaming : {1}\n\n🔗 <b>Stream Type :</b> {2}\n<emoji id='5408846628763217930'>👤</emoji> Requested by : {3}\n{4}"
 
-stream_1 : "<b><blockquote>➲ <emoji id='5436345165465794033'>🟥</emoji> Started Streaming |</blockquote></b>\n\n<b><blockquote>➠<emoji id='5039600026809009149'>📌</emoji> Title :</b> <a href={0}>{1}</a>\n<b>➠ <emoji id='5408910404732595664'>🕐</emoji> Duration :</b> {2} minutes\n<b>➠ <emoji id='5408846628763217930'>👤</emoji> Requested by </b> {3}<b></blockquote>\n<b><blockquote>"
-stream_2 : "<b><blockquote>➲ <emoji id='5436345165465794033'>🟥</emoji> Started Streaming |</blockquote></b>\n\n<b><blockquote>🌐 ➠ Stream type :</b> live stream [URL]\n<b>➠ <emoji id='5408846628763217930'>👤</emoji> Requested by :</b> {0}</blockquote>"
+stream_1 : "<b><blockquote><emoji id='5436345165465794033'>🟥</emoji> Started Streaming |</blockquote></b>\n\n<b><blockquote><emoji id='5039600026809009149'>📌</emoji> Title :</b> <a href={0}>{1}</a>\n<b> <emoji id='5408910404732595664'>🕐</emoji> Duration :</b> {2} minutes\n<b><emoji id='5408846628763217930'>👤</emoji> Requested by </b> {3}<b></blockquote>\n<b><blockquote>"
+stream_2 : "<b><blockquote><emoji id='5436345165465794033'>🟥</emoji> Started Streaming |</blockquote></b>\n\n<b><blockquote> Stream type :</b> live stream [URL]\n<b><emoji id='5408846628763217930'>👤</emoji> Requested by :</b> {0}</blockquote>"
 
 #General
 CLOSE_BUTTON  : "↻ ᴄʟᴏsᴇ ↻"
