@@ -1,3 +1,4 @@
+import asyncio
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, Message
 
@@ -11,6 +12,16 @@ from BrandrdXMusic.utils.inline import close_markup, stream_markup
 from BrandrdXMusic.utils.stream.autoclear import auto_clean
 from BrandrdXMusic.utils.thumbnails import get_thumb
 from config import BANNED_USERS
+
+
+# --- Auto Delete Helper Function ---
+async def auto_delete_message(message, delay=4):
+    await asyncio.sleep(delay)
+    try:
+        await message.delete()
+    except:
+        pass
+# -----------------------------------
 
 
 @app.on_message(
@@ -41,13 +52,14 @@ async def skip(cli, message: Message, _, chat_id):
                                 await auto_clean(popped)
                             if not check:
                                 try:
-                                    await message.reply_text(
+                                    end_msg = await message.reply_text(
                                         text=_["admin_6"].format(
                                             message.from_user.mention,
                                             message.chat.title,
                                         ),
                                         reply_markup=close_markup(_),
                                     )
+                                    asyncio.create_task(auto_delete_message(end_msg, delay=4))
                                     await Hotty.stop_stream(chat_id)
                                 except:
                                     return
@@ -66,26 +78,28 @@ async def skip(cli, message: Message, _, chat_id):
         try:
             popped = check.pop(0)
             if popped:
-                await auto_clean(popped)
+                await auto_clean(popped) # Yeh purane song ke message ko delete karta hai
             if not check:
-                await message.reply_text(
+                end_msg = await message.reply_text(
                     text=_["admin_6"].format(
                         message.from_user.mention, message.chat.title
                     ),
                     reply_markup=close_markup(_),
                 )
+                asyncio.create_task(auto_delete_message(end_msg, delay=4))
                 try:
                     return await Hotty.stop_stream(chat_id)
                 except:
                     return
         except:
             try:
-                await message.reply_text(
+                end_msg = await message.reply_text(
                     text=_["admin_6"].format(
                         message.from_user.mention, message.chat.title
                     ),
                     reply_markup=close_markup(_),
                 )
+                asyncio.create_task(auto_delete_message(end_msg, delay=4))
                 return await Hotty.stop_stream(chat_id)
             except:
                 return
@@ -102,6 +116,8 @@ async def skip(cli, message: Message, _, chat_id):
         db[chat_id][0]["seconds"] = check[0]["old_second"]
         db[chat_id][0]["speed_path"] = None
         db[chat_id][0]["speed"] = 1.0
+    
+    # Naye song ki details yahan se send hoti hain, ab inme koi delete timer nahi hai
     if "live_" in queued:
         n, link = await YouTube.video(videoid, True)
         if n == 0:
