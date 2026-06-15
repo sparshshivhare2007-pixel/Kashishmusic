@@ -1,5 +1,4 @@
 from typing import Union
-
 from pyrogram.types import InlineKeyboardButton
 
 
@@ -204,3 +203,30 @@ def video_quality_markup(
         ],
     ]
     return buttons
+
+# 🎥 /vplay कमांड के लिए क्वालिटी सिलेक्शन प्रॉम्प्ट ( टकराव से बचने के लिए अलग नाम )
+def vplay_quality_markup(_, videoid, user_id, channel, fplay):
+    return [
+        [
+            InlineKeyboardButton(
+                text="🎬 480p", 
+                callback_data=f"SetQuality {videoid}|{user_id}|480|{channel}|{fplay}"
+            ),
+            InlineKeyboardButton(
+                text="💎 720p", 
+                callback_data=f"SetQuality {videoid}|{user_id}|720|{channel}|{fplay}"
+            ),
+        ],
+        [
+            InlineKeyboardButton(
+                text="✨ 1080p", 
+                callback_data=f"SetQuality {videoid}|{user_id}|1080|{channel}|{fplay}"
+            ),
+        ],
+        [
+            InlineKeyboardButton(
+                text="❌ Cancel", 
+                callback_data=f"forceclose {videoid}|{user_id}"
+            )
+        ],
+    ]
