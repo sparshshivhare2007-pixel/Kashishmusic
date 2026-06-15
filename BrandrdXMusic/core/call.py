@@ -36,7 +36,8 @@ from BrandrdXMusic.utils.database import (
 )
 from BrandrdXMusic.utils.exceptions import AssistantErr
 from BrandrdXMusic.utils.formatters import check_duration, seconds_to_min, speed_converter
-from BrandrdXMusic.utils.inline.play import stream_markup
+# यहाँ stream_markup2 को इम्पोर्ट में जोड़ा गया है ताकि Error न आये
+from BrandrdXMusic.utils.inline.play import stream_markup, stream_markup2
 from BrandrdXMusic.utils.stream.autoclear import auto_clean
 from BrandrdXMusic.utils.thumbnails import get_thumb
 from strings import get_string
