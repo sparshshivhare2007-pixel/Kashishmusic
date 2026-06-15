@@ -204,11 +204,16 @@ class Call(PyTgCalls):
         dur = int(dur)
         played, con_seconds = speed_converter(playing[0]["played"], speed)
         duration = seconds_to_min(dur)
+        
+        # Dynamic Quality for Speedup
+        quality = playing[0].get("quality", "480")
+        v_param = VideoQuality.HD_720p if str(quality) == "720" else (VideoQuality.FHD_1080p if str(quality) == "1080" else VideoQuality.SD_480p)
+        
         stream = (
             MediaStream(
                 out,
                 audio_parameters=AudioQuality.HIGH,
-                video_parameters=VideoQuality.SD_480p,
+                video_parameters=v_param,
                 ffmpeg_parameters=f"-ss {played} -to {duration}",
             )
             if playing[0]["streamtype"] == "video"
@@ -267,11 +272,15 @@ class Call(PyTgCalls):
         image: Union[bool, str] = None,
     ):
         assistant = await group_assistant(self, chat_id)
+        check = db.get(chat_id)
+        quality = check[0].get("quality", "480") if check else "480"
+        v_param = VideoQuality.HD_720p if str(quality) == "720" else (VideoQuality.FHD_1080p if str(quality) == "1080" else VideoQuality.SD_480p)
+        
         if video:
             stream = MediaStream(
                 link,
                 audio_parameters=AudioQuality.HIGH,
-                video_parameters=VideoQuality.SD_480p,
+                video_parameters=v_param,
             )
         else:
             stream = MediaStream(
@@ -286,11 +295,15 @@ class Call(PyTgCalls):
 
     async def seek_stream(self, chat_id, file_path, to_seek, duration, mode):
         assistant = await group_assistant(self, chat_id)
+        check = db.get(chat_id)
+        quality = check[0].get("quality", "480") if check else "480"
+        v_param = VideoQuality.HD_720p if str(quality) == "720" else (VideoQuality.FHD_1080p if str(quality) == "1080" else VideoQuality.SD_480p)
+        
         stream = (
             MediaStream(
                 file_path,
                 audio_parameters=AudioQuality.HIGH,
-                video_parameters=VideoQuality.SD_480p,
+                video_parameters=v_param,
                 ffmpeg_parameters=f"-ss {to_seek} -to {duration}",
             )
             if mode == "video"
@@ -319,22 +332,27 @@ class Call(PyTgCalls):
         link,
         video: Union[bool, str] = None,
         image: Union[bool, str] = None,
+        quality: str = "480",
     ):
         assistant = await group_assistant(self, chat_id)
         language = await get_lang(chat_id)
         _ = get_string(language)
+        
+        # Dynamic Quality for Join Call
+        v_param = VideoQuality.HD_720p if str(quality) == "720" else (VideoQuality.FHD_1080p if str(quality) == "1080" else VideoQuality.SD_480p)
+        
         if video:
             stream = MediaStream(
                 link,
                 audio_parameters=AudioQuality.HIGH,
-                video_parameters=VideoQuality.SD_480p,
+                video_parameters=v_param,
             )
         else:
             stream = (
                 MediaStream(
                     link,
                     audio_parameters=AudioQuality.HIGH,
-                    video_parameters=VideoQuality.SD_480p,
+                    video_parameters=v_param,
                 )
                 if video
                 else MediaStream(
@@ -414,6 +432,11 @@ class Call(PyTgCalls):
                 db[chat_id][0]["speed_path"] = None
                 db[chat_id][0]["speed"] = 1.0
             video = str(streamtype) == "video"
+            
+            # Dynamic Quality Logic for Queue / Autoplay
+            quality = check[0].get("quality", "480")
+            v_param = VideoQuality.HD_720p if str(quality) == "720" else (VideoQuality.FHD_1080p if str(quality) == "1080" else VideoQuality.SD_480p)
+
             if "live_" in queued:
                 n, link = await YouTube.video(videoid, True)
                 if n == 0:
@@ -425,7 +448,7 @@ class Call(PyTgCalls):
                     stream = MediaStream(
                         link,
                         audio_parameters=AudioQuality.HIGH,
-                        video_parameters=VideoQuality.SD_480p,
+                        video_parameters=v_param,
                     )
                 else:
                     stream = MediaStream(
@@ -472,7 +495,7 @@ class Call(PyTgCalls):
                     stream = MediaStream(
                         file_path,
                         audio_parameters=AudioQuality.HIGH,
-                        video_parameters=VideoQuality.SD_480p,
+                        video_parameters=v_param,
                     )
                 else:
                     stream = MediaStream(
@@ -508,7 +531,7 @@ class Call(PyTgCalls):
                     MediaStream(
                         videoid,
                         audio_parameters=AudioQuality.HIGH,
-                        video_parameters=VideoQuality.SD_480p,
+                        video_parameters=v_param,
                     )
                     if str(streamtype) == "video"
                     else MediaStream(
@@ -538,7 +561,7 @@ class Call(PyTgCalls):
                     stream = MediaStream(
                         queued,
                         audio_parameters=AudioQuality.HIGH,
-                        video_parameters=VideoQuality.SD_480p,
+                        video_parameters=v_param,
                     )
                 else:
                     stream = MediaStream(
