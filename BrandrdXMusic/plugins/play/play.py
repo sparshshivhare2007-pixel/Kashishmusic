@@ -332,6 +332,7 @@ async def play_commnd(
         except:
             return await mystic.edit_text(_["play_3"])
         streamtype = "youtube"
+        
     if str(playmode) == "Direct":
         if not plist_type:
             if details["duration_min"]:
@@ -353,6 +354,19 @@ async def play_commnd(
                     _["play_13"],
                     reply_markup=InlineKeyboardMarkup(buttons),
                 )
+        
+        # 🎬 अगर डायरेक्ट मोड में वीडियो प्ले कमांड आया है तो सीधे क्वालिटी सिलेक्शन दिखाओ
+        if video:
+            from BrandrdXMusic.utils.inline.settings import vplay_quality_markup
+            buttons = vplay_quality_markup(_, track_id, user_id, "c" if channel else "g", "f" if fplay else "d")
+            await mystic.delete()
+            await message.reply_photo(
+                photo=details["thumb"],
+                caption=_["play_10"].format(details["title"].title(), details["duration_min"]) + "\n\n**🎬 Select Video Quality to stream:**",
+                reply_markup=InlineKeyboardMarkup(buttons),
+            )
+            return await play_logs(message, streamtype=f"Video Quality Menu (Direct)")
+
         try:
             await stream(
                 _,
@@ -443,6 +457,20 @@ async def play_music(client, CallbackQuery, _):
             return await CallbackQuery.answer(_["playcb_1"], show_alert=True)
         except:
             return
+
+    # 🎥 अगर यूजर ने वीडियो बटन पर क्लिक किया, तो उसे क्वालिटी सिलेक्शन मेनू में बदल दो
+    if mode == "v":
+        from BrandrdXMusic.utils.inline.settings import vplay_quality_markup
+        buttons = vplay_quality_markup(_, vidid, user_id, cplay, fplay)
+        try:
+            await CallbackQuery.edit_message_reply_markup(
+                reply_markup=InlineKeyboardMarkup(buttons)
+            )
+            await CallbackQuery.answer("🎬 Select Video Quality")
+        except:
+            pass
+        return
+
     try:
         chat_id, channel = await get_channeplayCB(_, cplay, CallbackQuery)
     except:
@@ -499,6 +527,90 @@ async def play_music(client, CallbackQuery, _):
         err = e if ex_type == "AssistantErr" else _["general_2"].format(ex_type)
         return await mystic.edit_text(err)
     return await mystic.delete()
+
+
+# 🛠️ नया कॉलबैक हैंडलर: जब यूजर 480p, 720p, या 1080p बटन पर क्लिक करेगा
+@app.on_callback_query(filters.regex("SetQuality") & ~BANNED_USERS)
+@languageCB
+async def set_video_quality(client, CallbackQuery, _):
+    callback_data = CallbackQuery.data.strip()
+    callback_request = callback_data.split(None, 1)[1]
+    vidid, user_id, quality, cplay, fplay = callback_request.split("|")
+    
+    if CallbackQuery.from_user.id != int(user_id):
+        try:
+            return await CallbackQuery.answer(_["playcb_1"], show_alert=True)
+        except:
+            return
+            
+    try:
+        chat_id, channel = await get_channeplayCB(_, cplay, CallbackQuery)
+    except:
+        return
+        
+    user_name = CallbackQuery.from_user.first_name
+    
+    try:
+        await CallbackQuery.message.delete()
+        await CallbackQuery.answer()
+    except:
+        pass
+        
+    mystic = await CallbackQuery.message.reply_text(
+        _["play_2"].format(channel) if channel else _["play_1"]
+    )
+    
+    try:
+        details, track_id = await YouTube.track(vidid, True)
+    except:
+        return await mystic.edit_text(_["play_3"])
+        
+    if details["duration_min"]:
+        duration_sec = time_to_seconds(details["duration_min"])
+        if duration_sec > config.DURATION_LIMIT:
+            return await mystic.edit_text(
+                _["play_6"].format(config.DURATION_LIMIT_MIN, app.mention)
+            )
+            
+    ffplay = True if fplay == "f" else None
+    
+    try:
+        await stream(
+            _,
+            mystic,
+            CallbackQuery.from_user.id,
+            details,
+            chat_id,
+            user_name,
+            CallbackQuery.message.chat.id,
+            video=int(quality), # चुनी हुई क्वालिटी (480, 720, 1080) कोर को पास की जा रही है
+            streamtype="youtube",
+            forceplay=ffplay,
+        )
+    except Exception as e:
+        ex_type = type(e).__name__
+        err = e if ex_type == "AssistantErr" else _["general_2"].format(ex_type)
+        return await mystic.edit_text(err)
+        
+    return await mystic.delete()
+
+
+# ❌ नया कॉलबैक हैंडलर: जब यूजर Cancel बटन पर क्लिक करेगा
+@app.on_callback_query(filters.regex("forceclose") & ~BANNED_USERS)
+async def forceclose_command(client, CallbackQuery):
+    callback_data = CallbackQuery.data.strip()
+    callback_request = callback_data.split(None, 1)[1]
+    vidid, user_id = callback_request.split("|")
+    if CallbackQuery.from_user.id != int(user_id):
+        try:
+            return await CallbackQuery.answer("This is not for you.", show_alert=True)
+        except:
+            return
+    try:
+        await CallbackQuery.message.delete()
+        await CallbackQuery.answer()
+    except:
+        pass
 
 
 @app.on_callback_query(filters.regex("AnonymousAdmin") & ~BANNED_USERS)
@@ -660,4 +772,4 @@ async def slider_queries(client, CallbackQuery, _):
         )
         return await CallbackQuery.edit_message_media(
             media=med, reply_markup=InlineKeyboardMarkup(buttons)
-)
+        )
