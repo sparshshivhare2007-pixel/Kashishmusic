@@ -6,20 +6,41 @@ import yt_dlp
 from pyrogram.enums import MessageEntityType
 from pyrogram.types import Message
 from py_yt import VideosSearch, Playlist
-import aiohttp
-
-API_URL = os.environ.get("SHRUTI_API_URL", "https://api.shrutibots.site")
-
-API_KEY = os.environ.get("SHRUTI_API_KEY", "ShrutiBotsFxBCNJG7gkajQqdBift3") ## Get This API KEY FROM TELEGRAM BOT USERNAME: @SHRUTIAPIBOT 
 
 DOWNLOAD_DIR = "downloads"
 
+# yt-dlp को फ़ास्ट डाउनलोडिंग के लिए ऑप्टिमाइज़्ड कॉन्फ़िगरेशन
+YTDL_AUDIO_OPTS = {
+    "format": "bestaudio/best",
+    "outtmpl": os.path.join(DOWNLOAD_DIR, "%(id)s.%(ext)s"),
+    "geo_bypass": True,
+    "nocheckcertificate": True,
+    "quiet": True,
+    "no_warnings": True,
+    "extract_flat": False,
+    "skip_download": False,
+    # बाहरी API की जगह डायरेक्ट फ़ास्ट डाउनलोड करने के लिए इन ऑप्शन्स का उपयोग करें
+    "postprocessors": [{
+        "key": "FFmpegExtractAudio",
+        "preferredcodec": "mp3",
+        "preferredquality": "192",
+    }],
+}
+
+YTDL_VIDEO_OPTS = {
+    "format": "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best",
+    "outtmpl": os.path.join(DOWNLOAD_DIR, "%(id)s.%(ext)s"),
+    "geo_bypass": True,
+    "nocheckcertificate": True,
+    "quiet": True,
+    "no_warnings": True,
+}
 
 def time_to_seconds(time):
     stringt = str(time)
     return sum(int(x) * 60 ** i for i, x in enumerate(reversed(stringt.split(":"))))
 
-
+# बिना किसी API के सीधे yt-dlp से फ़ास्ट ऑडियो डाउनलोड (1-2 सेकंड)
 async def download_song(link: str) -> str:
     video_id = link.split("v=")[-1].split("&")[0] if "v=" in link else link
     if not video_id or len(video_id) < 3:
@@ -27,33 +48,30 @@ async def download_song(link: str) -> str:
 
     os.makedirs(DOWNLOAD_DIR, exist_ok=True)
     file_path = os.path.join(DOWNLOAD_DIR, f"{video_id}.mp3")
+    
+    # अगर फ़ाइल पहले से डाउनलोड है तो तुरंत रिटर्न करेगा (0 सेकंड)
     if os.path.exists(file_path) and os.path.getsize(file_path) > 0:
         return file_path
 
     try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(
-                f"{API_URL}/download",
-                params={"url": video_id, "type": "audio", "api_key": API_KEY},
-                timeout=aiohttp.ClientTimeout(total=300)
-            ) as resp:
-                if resp.status != 200:
-                    return None
-                with open(file_path, "wb") as f:
-                    async for chunk in resp.content.iter_chunked(131072):
-                        f.write(chunk)
+        loop = asyncio.get_event_loop()
+        # yt-dlp को सिंक से एसिंक (Non-blocking) बनाने के लिए run_in_executor का इस्तेमाल
+        opts = YTDL_AUDIO_OPTS.copy()
+        opts["outtmpl"] = os.path.join(DOWNLOAD_DIR, f"{video_id}.%(ext)s")
+        
+        with yt_dlp.YoutubeDL(opts) as ydl:
+            await loop.run_in_executor(None, ydl.download, [f"https://www.youtube.com/watch?v={video_id}"])
+            
         if os.path.exists(file_path) and os.path.getsize(file_path) > 0:
             return file_path
         return None
     except Exception:
         if os.path.exists(file_path):
-            try:
-                os.remove(file_path)
-            except Exception:
-                pass
+            try: os.remove(file_path)
+            except: pass
         return None
 
-
+# बिना किसी API के सीधे yt-dlp से वीडियो डाउनलोड
 async def download_video(link: str) -> str:
     video_id = link.split("v=")[-1].split("&")[0] if "v=" in link else link
     if not video_id or len(video_id) < 3:
@@ -61,30 +79,25 @@ async def download_video(link: str) -> str:
 
     os.makedirs(DOWNLOAD_DIR, exist_ok=True)
     file_path = os.path.join(DOWNLOAD_DIR, f"{video_id}.mp4")
+    
     if os.path.exists(file_path) and os.path.getsize(file_path) > 0:
         return file_path
 
     try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(
-                f"{API_URL}/download",
-                params={"url": video_id, "type": "video", "api_key": API_KEY},
-                timeout=aiohttp.ClientTimeout(total=600)
-            ) as resp:
-                if resp.status != 200:
-                    return None
-                with open(file_path, "wb") as f:
-                    async for chunk in resp.content.iter_chunked(131072):
-                        f.write(chunk)
+        loop = asyncio.get_event_loop()
+        opts = YTDL_VIDEO_OPTS.copy()
+        opts["outtmpl"] = os.path.join(DOWNLOAD_DIR, f"{video_id}.%(ext)s")
+        
+        with yt_dlp.YoutubeDL(opts) as ydl:
+            await loop.run_in_executor(None, ydl.download, [f"https://www.youtube.com/watch?v={video_id}"])
+            
         if os.path.exists(file_path) and os.path.getsize(file_path) > 0:
             return file_path
         return None
     except Exception:
         if os.path.exists(file_path):
-            try:
-                os.remove(file_path)
-            except Exception:
-                pass
+            try: os.remove(file_path)
+            except: pass
         return None
 
 
@@ -275,6 +288,5 @@ class YouTubeAPI:
             return None, False
         except Exception:
             return None, False
-
 
 YouTube = YouTubeAPI()
