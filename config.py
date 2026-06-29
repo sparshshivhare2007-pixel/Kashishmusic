@@ -83,21 +83,21 @@ confirmer = {}
 
 
 START_IMG_URL = getenv(
-    "START_IMG_URL", "https://i.ibb.co/PvfcFZQd/x.jpg"
+    "START_IMG_URL", "https://i.ibb.co/Lz3cKzBV/x.jpg"
 )
 PING_IMG_URL = getenv(
-    "PING_IMG_URL", "https://i.ibb.co/PvfcFZQd/x.jpg"
+    "PING_IMG_URL", "https://i.ibb.co/Lz3cKzBV/x.jpg"
 )
-PLAYLIST_IMG_URL = "https://i.ibb.co/PvfcFZQd/x.jpg"
-STATS_IMG_URL = "https://i.ibb.co/PvfcFZQd/x.jpg"
-TELEGRAM_AUDIO_URL = "https://i.ibb.co/PvfcFZQd/x.jpg"
-TELEGRAM_VIDEO_URL = "https://i.ibb.co/PvfcFZQd/x.jpg"
-STREAM_IMG_URL = "https://i.ibb.co/PvfcFZQd/x.jpg"
-SOUNCLOUD_IMG_URL = "https://i.ibb.co/PvfcFZQd/x.jpg"
-YOUTUBE_IMG_URL = "https://i.ibb.co/PvfcFZQd/x.jpg"
-SPOTIFY_ARTIST_IMG_URL = "https://i.ibb.co/PvfcFZQd/x.jpg"
-SPOTIFY_ALBUM_IMG_URL = "https://i.ibb.co/PvfcFZQd/x.jpg"
-SPOTIFY_PLAYLIST_IMG_URL = "https://i.ibb.co/PvfcFZQd/x.jpg"
+PLAYLIST_IMG_URL = "https://i.ibb.co/Lz3cKzBV/x.jpg"
+STATS_IMG_URL = "https://i.ibb.co/Lz3cKzBV/x.jpg"
+TELEGRAM_AUDIO_URL = "https://i.ibb.co/Lz3cKzBV/x.jpg"
+TELEGRAM_VIDEO_URL = "https://i.ibb.co/Lz3cKzBV/x.jpg"
+STREAM_IMG_URL = "https://i.ibb.co/Lz3cKzBV/x.jpg"
+SOUNCLOUD_IMG_URL = "https://i.ibb.co/Lz3cKzBV/x.jpg"
+YOUTUBE_IMG_URL = "https://i.ibb.co/Lz3cKzBV/x.jpg"
+SPOTIFY_ARTIST_IMG_URL = "https://i.ibb.co/Lz3cKzBV/x.jpg"
+SPOTIFY_ALBUM_IMG_URL = "https://i.ibb.co/Lz3cKzBV/x.jpg"
+SPOTIFY_PLAYLIST_IMG_URL = "https://i.ibb.co/Lz3cKzBV/x.jpg"
 
 
 def time_to_seconds(time):
