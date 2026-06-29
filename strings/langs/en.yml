@@ -227,8 +227,8 @@ song_9 : "<emoji id='5438522812669111826'>🟥</emoji> Failed to download song f
 song_10 : "<emoji id='5438522812669111826'>🟥</emoji> Failed to upload on Telegram servers."
 song_11 : "<emoji id='5343819952023428595'>⚡️</emoji> Uploading started, baby\n\n<emoji id='5408910404732595664'>🕐</emoji> Please hold on..."
 
-play_1 : "<emoji id='5041992177563993101'>☄️</emoji>"
-play_2 : "<b><emoji id='5041992177563993101'>☄️</emoji> ➻ Channel Play Mode</b>\n\n<emoji id='5408910404732595664'>🕐</emoji> Processing, please wait...\n\n<emoji id='5469931384518755322'>♾</emoji> <b>Linked Channel :</b> {0}"
+play_1 : "<emoji id='6138798143447244059'>💣</emoji>"
+play_2 : "<b><emoji id='5041992177563993101'>☄️</emojsetting_6 : \"\u003Cemoji id='5424663180838182778'>😎\u003C/emoji> » Everyone : Anyone present in this group can play music here.\\n\\n\u003Cemoji id='5041792560368977040'>👑\u003C/emoji> » Admin Only: Only admins can play music in this group.\"i> ➻ Channel Play Mode</b>\n\n<emoji id='5408910404732595664'>🕐</emoji> Processing, please wait...\n\n<emoji id='5469931384518755322'>♾</emoji> <b>Linked Channel :</b> {0}"
 play_3 : "<emoji id='5438522812669111826'>🟥</emoji> » Failed to process query."
 play_4 : "<b><emoji id='5041792560368977040'>👑</emoji> Admins Only Play</b>\n<emoji id='5438522812669111826'>🟥</emoji> Only admins of this chat are allowed to play\n\n<emoji id='5469715729915859659'>✔️</emoji> Change play mode via /playmode"
 play_5 : "<emoji id='5039665997506675838'>⚠️</emoji> » Failed to process audio file.\n\n📦 Audio file size is larger than the defined limit."
