@@ -23,7 +23,7 @@ DURATION_LIMIT_MIN = int(getenv("DURATION_LIMIT", 900))
 LOGGER_ID = int(getenv("LOGGER_ID", None))
 
 # Get this value from @BRANDRD_ROBOT on Telegram by /id
-OWNER_ID = int(getenv("OWNER_ID", "2026491314"))
+OWNER_ID = int(getenv("OWNER_ID", "7641508639"))
 
 LOG = int(getenv("LOG", True))
 
@@ -35,15 +35,15 @@ HEROKU_API_KEY = getenv("HEROKU_API_KEY")
 
 UPSTREAM_REPO = getenv(
     "UPSTREAM_REPO",
-    "https://github.com/sachinopboy2/Babali",
+    "https://github.com/sparshshivhare2007-pixel/Kashishmusic",
 )
 UPSTREAM_BRANCH = getenv("UPSTREAM_BRANCH", "main")
 GIT_TOKEN = getenv(
     "GIT_TOKEN", None
 )  # Fill this variable if your upstream repository is private
 
-SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me/lostfairyyyo")
-SUPPORT_CHAT = getenv("SUPPORT_CHAT", "https://t.me/TamilChat_FM")
+SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me/ShizukaNetworks")
+SUPPORT_CHAT = getenv("SUPPORT_CHAT", "https://t.me/ShizukaNetworks")
 
 # Set this to True if you want the assistant to automatically leave chats after an interval
 AUTO_LEAVING_ASSISTANT = bool(getenv("AUTO_LEAVING_ASSISTANT", False))
@@ -83,21 +83,21 @@ confirmer = {}
 
 
 START_IMG_URL = getenv(
-    "START_IMG_URL", "https://i.ibb.co/Lz3cKzBV/x.jpg"
+    "START_IMG_URL", "https://i.ibb.co/7dhWSptj/x.jpg"
 )
 PING_IMG_URL = getenv(
-    "PING_IMG_URL", "https://i.ibb.co/Lz3cKzBV/x.jpg"
+    "PING_IMG_URL", "https://i.ibb.co/7dhWSptj/x.jpg"
 )
-PLAYLIST_IMG_URL = "https://i.ibb.co/Lz3cKzBV/x.jpg"
-STATS_IMG_URL = "https://i.ibb.co/Lz3cKzBV/x.jpg"
-TELEGRAM_AUDIO_URL = "https://i.ibb.co/Lz3cKzBV/x.jpg"
-TELEGRAM_VIDEO_URL = "https://i.ibb.co/Lz3cKzBV/x.jpg"
-STREAM_IMG_URL = "https://i.ibb.co/Lz3cKzBV/x.jpg"
-SOUNCLOUD_IMG_URL = "https://i.ibb.co/Lz3cKzBV/x.jpg"
-YOUTUBE_IMG_URL = "https://i.ibb.co/Lz3cKzBV/x.jpg"
-SPOTIFY_ARTIST_IMG_URL = "https://i.ibb.co/Lz3cKzBV/x.jpg"
-SPOTIFY_ALBUM_IMG_URL = "https://i.ibb.co/Lz3cKzBV/x.jpg"
-SPOTIFY_PLAYLIST_IMG_URL = "https://i.ibb.co/Lz3cKzBV/x.jpg"
+PLAYLIST_IMG_URL = "https://i.ibb.co/7dhWSptj/x.jpg"
+STATS_IMG_URL = "https://i.ibb.co/7dhWSptj/x.jpg"
+TELEGRAM_AUDIO_URL = "https://i.ibb.co/7dhWSptj/x.jpg"
+TELEGRAM_VIDEO_URL = "https://i.ibb.co/7dhWSptj/x.jpg"
+STREAM_IMG_URL = "https://i.ibb.co/7dhWSptj/x.jpg"
+SOUNCLOUD_IMG_URL = "https://i.ibb.co/7dhWSptj/x.jpg"
+YOUTUBE_IMG_URL = "https://i.ibb.co/7dhWSptj/x.jpg"
+SPOTIFY_ARTIST_IMG_URL = "https://i.ibb.co/7dhWSptj/x.jpg"
+SPOTIFY_ALBUM_IMG_URL = "https://i.ibb.co/7dhWSptj/x.jpg"
+SPOTIFY_PLAYLIST_IMG_URL = "https://i.ibb.co/7dhWSptj/x.jpg"
 
 
 def time_to_seconds(time):
